@@ -7,30 +7,64 @@
 def arrayManipulation(n, queries):
     '''
     :param n: is the length of array zeros
-    :param queries:
+    :param queries: list of queries to come: [[1,2,4], [4,7,9]]
     :return:
     '''
-    dictionary = {}
-    # {'1-2':100}
-    # {'1':100, '2':200, '3-5':100, }
-    for q in queries:
-        start, end, num = q.split(' ')
-        for k in dictionary.keys():
-            if not k:
-                continue
-            # see if there are intersection
-            if '-' in k:
-                k_start, k_end = k.split('-')
-                # no intersection
-                if int(end) < int(k_start) or int(start) > int(k_end):
-                    new_key = '-'.join([start, end]) if start!=end else start
-                    dictionary[new_key] = int(num)
-                # has intersection
-                else:
-                    # completely cover
-                    if int(start) >= int(k_start) and int(end) <= int(k_end):
+    arr = [0] * n
+    for i in queries:
+        arr[i[0] - 1] += i[2]
+        if i[1] != len(arr):
+            arr[i[1]] -= i[2]
+    maxval = 0
+    itt = 0
+    for q in arr:
+        itt += q
+        if itt > maxval:
+            maxval = itt
+    return maxval
+        
+
+'''
+def insertIntoArray(arr, pos, num, dropdup=True):
+    left = arr[:pos]
+    right = arr[pos:]
+    left.append(num)
+    left.extend(right)
+    if dropdup==True:
+        return sorted(list(set(left)))
+    else:
+        return left
 
 
-                    if int(end) >= int(start) and int(start)<=int(start):
+def divide(arr, values, q):
+    q_s, q_e, q_num = list(map(int, q.split(' ')))
+    # possible position for q_s is [0,1,2,...,len(arr)]
+    pos_s = 0
+    while pos_s <=len(arr)-1 and q_s > arr[pos_s]:
+        pos_s += 1
+    arr = insertIntoArray(arr, pos_s, q_s,dropdup=True)
+    values = insertIntoArray(values, pos_s, values[pos_s],dropdup=False)
+    print('arr:',arr)
+    print('values:', values)
+    pos_e = pos_s
+    while pos_e <=len(arr)-1 and q_e > arr[pos_e]:
+        pos_e += 1
+    arr = insertIntoArray(arr, pos_e, q_e, dropdup=True)
+    values = insertIntoArray(values, pos_e, values[pos_e], dropdup=False)
+    print('arr:', arr)
+    print('values:', values)
+    # change the values
+    for i in range(pos_s+1, pos_e+1):
+        values[i] += q_num
+    return pos_s, pos_e, values
+'''
+
+if __name__ == '__main__':
+    # res = divide([1,2,8,10], [0,4,5,7,0], '4 6 9')
+    # res = divide([1, 6, 8, 10], [0, 4, 5, 7, 0], '4 9 9')
+    # res = divide([1, 2, 8, 10], [0, 4, 5, 7, 0], '4 6 9')
+    # print(res)
+
+    arrayManipulation(10, [[1,2,100],[2,5,100]])
 
 
